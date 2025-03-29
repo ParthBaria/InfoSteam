@@ -3,11 +3,7 @@ import "./NewsList.css"
 import img from "../digital health card.png"
 
 function NewsList(props) {
-    if (props.articles.length === 0) {
-        return <div>
-            <h1>there is no news</h1>
-        </div>
-    }
+
     // console.log(props.articles[0].urlToImage);
     return (
         props.articles.map(news => {
