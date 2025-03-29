@@ -6,7 +6,6 @@ function Pagination(props) {
     const { pn } = useParams();
     const page = Number(pn);
     const total_page = Number(props.total_page);
-    console.log(total_page)
     const nav = useNavigate();
     const handleReplace = (page) => {
         nav(`/page/${page}`);
