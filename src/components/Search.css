@@ -1,0 +1,17 @@
+.search{
+    display: flex;
+    justify-content: end;
+    color: black;
+    width: 33.33%;
+    margin: 5px 15px 5px 5px ;
+}
+
+.search_bar{
+   margin: 5px;
+}
+
+.Search_txet{
+    padding: 5px;
+    border: 1px solid black;
+    border-radius: 4px;
+}

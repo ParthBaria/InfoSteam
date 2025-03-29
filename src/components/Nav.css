@@ -1,0 +1,116 @@
+
+.nav {
+    display: flex;
+    background-color: #146eb4;
+    width: 100%;
+    max-height: 250px;
+    padding: 10px;
+    align-items: center;
+    justify-content: space-between;
+    /* flex-wrap: wrap; Items ko chhote screens par wrap karne ki ijazat deta hai */
+}
+.logo{
+    font-size: larger;
+    font-weight: bolder;
+}
+.nav >ul{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.list{
+    display: flex;
+    list-style: none;
+    align-items: end;
+}
+.list >a{
+    text-decoration: none;
+    color: black;
+}
+.search {
+    display: flex;
+    height: 2rem;
+    font-size: 2rem;
+    position: absolute;
+  right: 10px;
+}
+
+.search_text {
+    font-size: 1rem;
+    padding-left: 1rem;
+    border-radius: 10px;
+    border-color: azure;
+    height: 2rem;
+}
+
+.login{
+    width: 33.33%;
+    margin: 5px 5px 5px 15px ;
+    display: flex;
+    justify-content: start;
+    font-size: 18px;
+    font-weight: 500;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.btn{
+    border: 1px solid black;
+    padding: 7px;
+    color: white;
+    background:#0c3866;
+    border-radius: 4px;
+    transition: all 0.3s ease; 
+}
+
+.btn:hover {
+    background: #084b72; 
+    color: red; 
+    transform: scale(1); 
+}
+
+nav{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-height: 250px;
+    padding: 10px;
+    position: relative;
+
+    /* background:green; */
+}
+.logo_main{
+    display: flex;
+    width: 33.33%;
+    justify-content: center;
+    align-items: baseline;
+    font-size: 40px;
+    font-weight: 550;
+}
+
+#logo_i,#logo_s{
+    font-size: 50px;
+    color: red;  
+}
+
+.menu_bar{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    border-top: 1px solid gainsboro; /* Top border */
+    border-bottom: 1px solid gainsboro; /* Bottom border */
+    padding: 15px;
+}
+
+ul,li{
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+    align-items: center;
+    gap: 25px;
+    text-decoration: none;
+    font-size: large;
+    font-weight: 600;
+
+}

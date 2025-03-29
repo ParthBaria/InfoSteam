@@ -1,0 +1,5 @@
+.main_container {
+    display: grid;
+    gap: 15px;
+    grid-template-columns: repeat(4, 1fr); /* 4 columns for larger screens */
+}
