@@ -1,0 +1,160 @@
+/* ======= Main Navigation Wrapper ======= */
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #146eb4;
+  width: 100%;
+  padding: 10px 20px;
+  position: relative;
+  flex-wrap: wrap;
+  color: white;
+}
+
+/* ======= Logo Section ======= */
+.logo_main {
+  font-size: 36px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#logo_i,
+#logo_s {
+  font-size: 44px;
+  color: red;
+}
+
+/* ======= Search Component Wrapper ======= */
+.search {
+  display: flex;
+  align-items: center;
+  position: relative;
+  flex: 1;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.search_text {
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  height: 2rem;
+  min-width: 240px;
+}
+
+/* ======= Auth (Login/Avatar) ======= */
+.auth_container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-left: auto;
+}
+
+.login_button {
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.login_button:hover {
+  background-color: #0056b3;
+}
+
+.user_avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background-color: #444;
+  color: white;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  cursor: default;
+}
+
+/* ======= Menu Bar ======= */
+.menu_bar {
+  display: flex;
+  justify-content: center;
+  padding: 15px;
+  border-top: 1px solid gainsboro;
+  border-bottom: 1px solid gainsboro;
+  background-color: #fff;
+}
+
+.menu_bar ul {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+  padding: 0;
+  margin: 0;
+}
+
+.menu_bar li a {
+  text-decoration: none;
+  color: #333;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.menu_bar li a:hover {
+  color: #007bff;
+}
+
+/* ======= Responsive Adjustments ======= */
+@media (max-width: 768px) {
+  .logo_main {
+    font-size: 28px;
+  }
+
+  .search_text {
+    min-width: 180px;
+  }
+
+  .menu_bar ul {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  nav {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .auth_container {
+    margin: 10px 0 0 0;
+  }
+}
+.logout_button {
+  padding: 10px 16px;
+  background-color: white;
+  border: none;
+  color: #333;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s, transform 0.2s;
+  width: 120px;
+  position: absolute;
+  right: 0;
+  top: 62%;
+}
+
+.logout_button:hover {
+  background-color: #f44336;
+  color: white;
+  transform: translateY(-2px);
+}
