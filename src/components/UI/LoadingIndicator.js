@@ -2,8 +2,8 @@ import React from 'react';
 
 import './LoadingIndicator.css';
 
-const LoadingIndicator = () => (
-  <div className="lds-ring">
+const LoadingIndicator = ({ style }) => (
+  <div className="lds-ring" style={style}>
     <div />
     <div />
     <div />

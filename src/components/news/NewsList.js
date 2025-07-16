@@ -1,17 +1,33 @@
 import React, { useState } from 'react';
 import { FaRegBookmark, FaBookmark } from 'react-icons/fa'; // Bookmark icons
 import "./NewsList.css";
+import firestore from '../../handlers/firestore';
+import { useAuthContext } from '../context/AuthContext';
 
 function NewsList(props) {
-    console.log(props);
+    const { currentUser } = useAuthContext();
+    const { writeDoc } = firestore;
     const [favorites, setFavorites] = useState([]);
 
-    const toggleFavorite = (articleUrl) => {
-        setFavorites((prevFavs) =>
-            prevFavs.includes(articleUrl)
-                ? prevFavs.filter((url) => url !== articleUrl)
-                : [...prevFavs, articleUrl]
-        );
+    const toggleFavorite = async (news) => {
+        const { email } = currentUser;
+
+        const newNews = {
+            ...news, email
+        }
+
+        try {
+
+            await writeDoc(newNews);
+            setFavorites((prevFavs) =>
+                prevFavs.includes(news.url)
+                    ? prevFavs.filter((url) => url !== news.url)
+                    : [...prevFavs, news.url]
+            );
+        } catch (error) {
+
+        }
+
     };
 
     if (props.articles.length === 0) {
@@ -26,7 +42,7 @@ function NewsList(props) {
                 {/* Bookmark Button */}
                 <button
                     className="bookmark_button"
-                    onClick={() => toggleFavorite(news.url)}
+                    onClick={() => toggleFavorite(news)}
                     title={isFavorite ? "Remove from Favorites" : "Save to Favorites"}
                 >
                     {isFavorite ? <FaBookmark /> : <FaRegBookmark />}

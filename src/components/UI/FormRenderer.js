@@ -3,7 +3,7 @@ import './FormRenderer.css';
 import { useAuthContext } from '../context/AuthContext';
 
 function FormRenderer(props) {
-    const { login, currentUser } = useAuthContext();
+    const { login } = useAuthContext();
     const [formData, setFormData] = useState({});
 
     const handleChange = (e, name) => {

@@ -24,13 +24,11 @@ const useHttp = () => {
             {
                 method: method,
                 body: body,
-                // headers: { 'Content-Type': 'application/json' }
             }
         ).then(respose => {
             return respose.json();
         }).then(data => {
             console.log(data)
-            // setUserIngred(prevState => [...prevState, { id: data.name, ...ingredient }]);
             dipatchHttp({ type: "RESP", data: data.articles })
         }).catch(err => {
             dipatchHttp({ type: "ERR", errormsg: "something went wrong!" })
