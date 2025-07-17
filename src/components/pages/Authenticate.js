@@ -18,6 +18,8 @@ const Authenticate = () => {
         setIsloading(true);
         try {
             await loginWithEmail(data.email, data.password);
+            console.log("you are logged");
+            
             navigate('/favorites/1');
         } catch (err) {
             alert("Error: " + err.message);

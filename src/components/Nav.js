@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import Search from "./Search";
 import "./Nav.css";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 import { useAuthContext } from "./context/AuthContext";
 import { useSearch } from "./context/SearchContext";
 
 function Nav(props) {
   const { currentUser, logout } = useAuthContext();
+  const nav=useNavigate();
   const location = useLocation();
   const { setQuery } = useSearch();
   const [active, setActive] = useState(false);
@@ -15,7 +17,7 @@ function Nav(props) {
   const firstChar = currentUser?.email?.charAt(0).toUpperCase() || "";
 
   const handleLogin = () => {
-    window.location.href = "/login";
+    nav("/login");
   };
   const handleSearch = (e) => {
     setQuery(e);
@@ -27,7 +29,7 @@ function Nav(props) {
   };
 
   return (
-    <div className="menu" style={{ position: "relative",width:"100%" }}>
+    <div className="menu" style={{ position: "relative", width: "100%" }}>
       <nav>
         <div className="logo_main">
           <span id="logo_i">i</span>
@@ -58,13 +60,13 @@ function Nav(props) {
       <div className="menu_bar">
         <ul>
           <li>
-            <a href="/">Home</a>
+            <Link to="/page/1">Home</Link>
           </li>
           <li>
-            <a href="/favorites/1">Favorites</a>
+            <Link to="/favorites/1">Favorites</Link>
           </li>
           <li>
-            <a href="/about">About</a>
+            <Link to="/about">About</Link>
           </li>
         </ul>
       </div>

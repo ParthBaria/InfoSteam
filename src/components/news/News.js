@@ -7,6 +7,8 @@ function News(props) {
   const { pn } = useParams();
   const [newsPage, setNewsPage] = useState({ data: [], pageNum: 1 });
   const error = Array.isArray(props.news) ? null : "fetching went wrong";
+  console.log(props.news);
+  
 
   const total_page = Math.floor(props.news.length / 12);
 

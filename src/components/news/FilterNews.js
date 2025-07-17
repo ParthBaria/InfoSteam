@@ -1,19 +1,22 @@
 import React, { useMemo, useState } from "react";
 import Search from "../Search";
 import News from "./News";
+import { useFavourite } from "../context/FavouriteContext";
 
-export const FilterNews = (props) => {
+export const FilterNews = () => {
+  const { favourites, loadingNews } = useFavourite();
   const [query, setQuery] = useState("");
-  
+
+  console.log(favourites);
   const filterNews = useMemo(() => {
-    return props.news.filter((news) =>
-      news.title.toLowerCase().includes(query.toLowerCase())
+    return favourites.filter((favourites) =>
+      favourites.title.toLowerCase().includes(query.toLowerCase())
     );
-  }, [props.news,query]);
+  }, [favourites, query]);
   return (
     <>
       <Search onChange={(e) => setQuery(e)} />
-      <News news={filterNews} />
+      {!loadingNews && <News news={filterNews} />}
     </>
   );
 };

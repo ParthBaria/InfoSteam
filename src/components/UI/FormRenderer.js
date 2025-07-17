@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import './FormRenderer.css';
 import { useAuthContext } from '../context/AuthContext';
+import { useNavigate } from 'react-router';
 
 function FormRenderer(props) {
+    const nav=useNavigate();
     const { login } = useAuthContext();
     const [formData, setFormData] = useState({});
 
@@ -14,6 +16,15 @@ function FormRenderer(props) {
         e.preventDefault();
         props.onSubmit(formData);
     };
+
+    const handleGoogleLogin=async(e)=>{
+        try {
+            await login();
+            nav("/favorites/1");
+        } catch (error) {
+            nav("/page/1");
+        }
+    }
 
     return (
         <div className="form_wrapper">
@@ -46,7 +57,7 @@ function FormRenderer(props) {
                 <>
                     <div className="or_separator">OR</div>
 
-                    <button className="google_login_btn" onClick={login}>
+                    <button className="google_login_btn" onClick={handleGoogleLogin}>
                         <img
                             src="https://developers.google.com/identity/images/g-logo.png"
                             alt="Google Logo"

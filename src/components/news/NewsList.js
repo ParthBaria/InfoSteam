@@ -1,84 +1,108 @@
-import React, { useState } from 'react';
-import { FaRegBookmark, FaBookmark } from 'react-icons/fa'; // Bookmark icons
+import { FaRegBookmark, FaBookmark } from "react-icons/fa"; // Bookmark icons
 import "./NewsList.css";
-import firestore from '../../handlers/firestore';
-import { useAuthContext } from '../context/AuthContext';
+import firestore from "../../handlers/firestore";
+import { useAuthContext } from "../context/AuthContext";
+import { motion } from "framer-motion";
+import { useFavourite } from "../context/FavouriteContext";
+import { toast } from "react-toastify";
 
 function NewsList(props) {
-    const { currentUser } = useAuthContext();
-    const { writeDoc } = firestore;
-    const [favorites, setFavorites] = useState([]);
+  const { currentUser } = useAuthContext();
+  const { writeDoc, deleteDoc } = firestore;
+  const { favourites ,setFavourites} = useFavourite();
 
-    const toggleFavorite = async (news) => {
-        const { email } = currentUser;
+  const toggleFavorite = async (news) => {
+    const favExist = favourites.some((item) => item.url === news.url);
 
-        const newNews = {
-            ...news, email
-        }
+    if (!favExist) {
+      const { email } = currentUser;
 
-        try {
+      const newNews = {
+        ...news,
+        email,
+      };
 
-            await writeDoc(newNews);
-            setFavorites((prevFavs) =>
-                prevFavs.includes(news.url)
-                    ? prevFavs.filter((url) => url !== news.url)
-                    : [...prevFavs, news.url]
-            );
-        } catch (error) {
-
-        }
-
-    };
-
-    if (props.articles.length === 0) {
-        return <div><h1>There is no news</h1></div>;
+      try {
+        await writeDoc(newNews);
+         setFavourites((prev) => [...prev, newNews]);
+        toast.success("Added to Favorites!");
+      } catch (error) {
+         toast.error("Failed to add favorite!");
+      }
+    } else {
+      try {
+        await deleteDoc(news.id);
+          setFavourites((prev) => prev.filter((item) => item.url !== news.url));
+        toast.info("Removed from Favorites");
+      } catch (error) {
+        toast.error("Failed to remove favorite!");
+      }
     }
+  };
 
-    return props.articles.map(news => {
-        const isFavorite = favorites.includes(news.url);
+  if (props.articles.length === 0) {
+    return (
+      <div>
+        <h1>There is no news</h1>
+      </div>
+    );
+  }
 
-        return (
-            <div key={news.url || news.title} className="card_container">
-                {/* Bookmark Button */}
-                <button
-                    className="bookmark_button"
-                    onClick={() => toggleFavorite(news)}
-                    title={isFavorite ? "Remove from Favorites" : "Save to Favorites"}
-                >
-                    {isFavorite ? <FaBookmark /> : <FaRegBookmark />}
-                </button>
+  return props.articles.map((news) => {
+    const isFavorite = favourites.some((item) => item.url === news.url);
 
-                {/* News Image */}
-                <a href={news.url} target="_blank" rel="noopener noreferrer" className="card_img_container">
-                    <img
-                        src={news.urlToImage}
-                        alt="img"
-                        className="card_image"
-                        loading="lazy"
-                    />
-                </a>
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        key={news.url || news.title}
+        className="card_container"
+      >
+        {currentUser && (
+          <button
+            className="bookmark_button"
+            onClick={() => toggleFavorite(news)}
+            title={isFavorite ? "Remove from Favorites" : "Save to Favorites"}
+          >
+            {isFavorite ? <FaBookmark /> : <FaRegBookmark />}
+          </button>
+        )}
 
-                {/* Title + Description */}
-                <div className="card_title_contianer">
-                    <a className="card_title_anchor" href={news.url} target="_blank" rel="noopener noreferrer">
-                        <h2 className="card_title">{news.title}</h2>
-                    </a>
-                    <p className="card_desc">{news.description}</p>
-                </div>
+        <a
+          href={news.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="card_img_container"
+        >
+          <img src={news.urlToImage} className="card_image" alt="no Image" />
+        </a>
 
-                {/* Footer with author/date */}
-                <div className="footer_container">
-                    <div className="author_container">
-                        <div className="author_info_container">
-                            <span className="author_name">{news.author || "Unknown"}</span>
-                            <span className="author_date">{news.publishedAt?.split('T')[0]}</span>
-                        </div>
-                    </div>
-                </div>
+        <div className="card_title_contianer">
+          <a
+            className="card_title_anchor"
+            href={news.url}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <h2 className="card_title">{news.title}</h2>
+          </a>
+          {news.description ?<p className="card_desc">{news.description}</p>:<p>no description</p>}
+        </div>
+
+        <div className="footer_container">
+          <div className="author_container">
+            <div className="author_info_container">
+              <span className="author_name">{news.author || "Unknown"}</span>
+              <span className="author_date">
+                {news.publishedAt?.split("T")[0]}
+              </span>
             </div>
-        );
-
-    });
+          </div>
+        </div>
+      </motion.div>
+    );
+  });
 }
 
 export default NewsList;

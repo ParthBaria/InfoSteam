@@ -7,6 +7,7 @@ import {
   getDocs,
   query,
   where,
+  deleteDoc,
 } from "firebase/firestore";
 import app from "../lib/firebase.config";
 
@@ -22,8 +23,10 @@ const firestore = {
     return new Promise(async (resolve) => {
       try {
         const snapShots = await getDocs(q);
+        
         snapShots.forEach((doc) => {
-          const d = { ...doc.data() };
+          const id=doc.id;
+          const d = { ...doc.data(),id};
           docs.push(d);
         });
 
@@ -34,7 +37,7 @@ const firestore = {
     });
   },
   writeDoc: (...args) => {
-    const [inputs, collection_name] = args;
+    const [inputs] = args;
 
     return new Promise(async (resolve, reject) => {
       const randomIndex = Math.floor(Math.random() * 10000000);
@@ -50,6 +53,23 @@ const firestore = {
       }
     });
   },
+  
+  deleteDoc: (...args) => {
+    const [inputs] = args;
+
+    return new Promise(async (resolve, reject) => {
+      try {
+        const docRef = doc(db, "userNews", `${inputs}`);
+        await deleteDoc(docRef);
+
+        resolve("Document deleted successfully");
+      } catch (error) {
+        console.error("Error deleting document:", error);
+        reject(error);
+      }
+    });
+  },
+
 };
 
 export default firestore;
