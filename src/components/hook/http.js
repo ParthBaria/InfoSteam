@@ -28,7 +28,6 @@ const useHttp = () => {
         ).then(respose => {
             return respose.json();
         }).then(data => {
-            console.log(data)
             dipatchHttp({ type: "RESP", data: data.articles })
         }).catch(err => {
             dipatchHttp({ type: "ERR", errormsg: "something went wrong!" })

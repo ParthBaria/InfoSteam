@@ -15,7 +15,6 @@ const firebaseAuth = {
       signInWithPopup(auth, provider)
         .then((response) => resolve(response.user))
         .catch((error) => {
-          console.error("Google Sign-in Error:", error.message);
           reject(error);
         });
     }),
@@ -28,10 +27,8 @@ const firebaseAuth = {
   loginWithEmail: async (email, password) => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      console.log("User logged in:", userCredential.user);
       return userCredential.user;
     } catch (error) {
-      console.error("Login Error:", error.message);
       throw error;
     }
   },
@@ -40,10 +37,8 @@ const firebaseAuth = {
 export const registerUser = async (email, password) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    console.log("User registered:", userCredential.user);
     return userCredential.user;
   } catch (error) {
-    console.error("Registration Error:", error.message);
     throw error;
   }
 };

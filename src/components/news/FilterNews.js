@@ -4,10 +4,9 @@ import News from "./News";
 import { useFavourite } from "../context/FavouriteContext";
 
 export const FilterNews = () => {
-  const { favourites, loadingNews } = useFavourite();
+  const { favourites, loadingNews ,error} = useFavourite();
   const [query, setQuery] = useState("");
 
-  console.log(favourites);
   const filterNews = useMemo(() => {
     return favourites.filter((favourites) =>
       favourites.title.toLowerCase().includes(query.toLowerCase())
@@ -16,7 +15,10 @@ export const FilterNews = () => {
   return (
     <>
       <Search onChange={(e) => setQuery(e)} />
-      {!loadingNews && <News news={filterNews} />}
+      {!error&&!loadingNews && <News news={filterNews} />}
+      {
+        error && <p>{"error in fetching news"}</p>
+      }
     </>
   );
 };

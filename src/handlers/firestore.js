@@ -20,7 +20,7 @@ const firestore = {
     let docs = [];
     const ref = collection(db, "userNews");
     const q=query(ref,where("email","==",inputs));
-    return new Promise(async (resolve) => {
+    return new Promise(async (resolve,reject) => {
       try {
         const snapShots = await getDocs(q);
         
@@ -32,7 +32,7 @@ const firestore = {
 
        resolve( docs);
       } catch (error) {
-        console.log(error);
+        reject(error);
       }
     });
   },
@@ -48,7 +48,6 @@ const firestore = {
 
         resolve("Document written successfully");
       } catch (error) {
-        console.error("Error writing document:", error);
         reject(error);
       }
     });
@@ -64,7 +63,6 @@ const firestore = {
 
         resolve("Document deleted successfully");
       } catch (error) {
-        console.error("Error deleting document:", error);
         reject(error);
       }
     });

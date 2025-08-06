@@ -14,6 +14,13 @@ nav {
   flex-wrap: wrap;
   color: white;
 }
+.menu{
+  width: 100%;
+}
+ .scrolled {
+  position: fixed;
+  z-index: 100;
+}
 
 .logo_main {
   font-size: 36px;
@@ -29,23 +36,7 @@ nav {
   color: red;
 }
 
-.search {
-  display: flex;
-  align-items: center;
-  position: relative;
-  flex: 1;
-  justify-content: center;
-  margin-top: 10px;
-}
 
-.search_text {
-  font-size: 1rem;
-  padding: 0.5rem 1rem;
-  border-radius: 10px;
-  border: 1px solid #ddd;
-  height: 2rem;
-  min-width: 240px;
-}
 
 .auth_container {
   display: flex;

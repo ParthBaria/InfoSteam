@@ -1,5 +1,6 @@
-import { createContext, useContext, useMemo, useState, useEffect } from "react";
+import { createContext, useContext, useMemo, useState, useEffect, useCallback } from "react";
 import firebaseAuth, { registerUser } from "../../handlers/auth";
+import { toast } from "react-toastify";
 
 const { signIn, signOut, loginWithEmail } = firebaseAuth;
 
@@ -10,22 +11,21 @@ const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-  const storedUser = localStorage.getItem("authUser");
+    const storedUser = localStorage.getItem("authUser");
 
-  if (storedUser) {
-    try {
-      const parsedUser = JSON.parse(storedUser);
-      setCurrentUser(parsedUser);
-    } catch (e) {
-      console.error("Failed to parse stored user:", e);
-      localStorage.removeItem("authUser");
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setCurrentUser(parsedUser);
+      } catch (e) {
+        console.error("Failed to parse stored user:", e);
+        localStorage.removeItem("authUser");
+      }
+    } else {
+      toast.info("please login to use saving functionalities");
     }
-  } else {
-    console.warn("No stored user found");
-  }
 
-  setLoading(false);
-
+    setLoading(false);
   }, []);
 
   const saveUserToLocalStorage = (user) => {
@@ -33,12 +33,12 @@ const AuthProvider = ({ children }) => {
     localStorage.setItem("authUser", JSON.stringify(user));
   };
 
-  const login = () =>
+  const login = useCallback( () =>
     signIn().then((user) => {
       saveUserToLocalStorage(user);
-    });
+    }),[]);
 
-  const loginWithEmailFn = async (email, password) => {
+  const loginWithEmailFn = useCallback( async (email, password) => {
     try {
       const user = await loginWithEmail(email, password);
       saveUserToLocalStorage(user);
@@ -46,9 +46,9 @@ const AuthProvider = ({ children }) => {
     } catch (error) {
       console.log(error);
     }
-  };
+  },[]);
 
-  const registerWithEmail = async (email, password) => {
+  const registerWithEmail = useCallback(async (email, password) => {
     try {
       const user = await registerUser(email, password);
       saveUserToLocalStorage(user);
@@ -56,7 +56,7 @@ const AuthProvider = ({ children }) => {
     } catch (error) {
       console.log(error);
     }
-  };
+  },[]);
 
   const logout = () => {
     return signOut().then(() => {
@@ -74,7 +74,7 @@ const AuthProvider = ({ children }) => {
       currentUser,
       loading,
     }),
-    [currentUser]
+    [currentUser,login,loading,loginWithEmailFn,registerWithEmail]
   );
 
   return <Context.Provider value={value}>{children}</Context.Provider>;

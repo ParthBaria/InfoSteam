@@ -2,6 +2,7 @@
   display: flex;
   justify-content:flex-start;
   margin: 20px auto;
+  margin-left: 20px;
 }
 
 .dropdown_menu {
@@ -16,6 +17,7 @@
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   min-width: 220px;
+  height: 40px;
 }
 
 .dropdown_menu:hover {

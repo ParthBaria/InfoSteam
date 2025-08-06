@@ -1,7 +1,7 @@
 import React from 'react';
 import "./Dropdown.css";
 
-const option = ["top-headlines", "business", "bitcoin", "health"];
+const option = ["world", "technology", "business", "health","sports"];
 
 function Dropdown(props) {
   function handleChange(event) {

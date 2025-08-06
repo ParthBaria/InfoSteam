@@ -5,6 +5,7 @@ import { useAuthContext } from "../context/AuthContext";
 import { motion } from "framer-motion";
 import { useFavourite } from "../context/FavouriteContext";
 import { toast } from "react-toastify";
+import FallbackImg from "../../assets/fallback.jpg" 
 
 function NewsList(props) {
   const { currentUser } = useAuthContext();
@@ -56,7 +57,7 @@ function NewsList(props) {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        key={news.url || news.title}
+        key={news.id}
         className="card_container"
       >
         {currentUser && (
@@ -75,9 +76,9 @@ function NewsList(props) {
           rel="noopener noreferrer"
           className="card_img_container"
         >
-          <img src={news.urlToImage} className="card_image" alt="no Image" />
+          <img src={news.image} className="card_image" alt="not Available" onError={(e)=>{e.target.onerror=null; e.target.src=FallbackImg;}} />
         </a>
-
+ 
         <div className="card_title_contianer">
           <a
             className="card_title_anchor"
@@ -93,7 +94,6 @@ function NewsList(props) {
         <div className="footer_container">
           <div className="author_container">
             <div className="author_info_container">
-              <span className="author_name">{news.author || "Unknown"}</span>
               <span className="author_date">
                 {news.publishedAt?.split("T")[0]}
               </span>

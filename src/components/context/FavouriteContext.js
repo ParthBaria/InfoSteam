@@ -8,6 +8,7 @@ export const FavouriteProvider = (props) => {
   const { currentUser, loading } = useAuthContext();
   const [favourites, setFavourites] = useState([]);
   const [loadingNews, setLoadingNews] = useState(true);
+  const [error,setError]=useState(null);
 
   useEffect(() => {
     if (loading || !currentUser?.email) return;
@@ -16,20 +17,19 @@ export const FavouriteProvider = (props) => {
       setLoadingNews(true);
       try {
         const fetchedNews = await readDoc(currentUser.email);
-        console.log(fetchedNews);
-        
         setFavourites(fetchedNews || []);
       } catch (error) {
-        console.error("Error fetching favourites:", error);
+        setError(error.message);
       } finally {
-        setLoadingNews(false);
+        
       }
+      setLoadingNews(false);
     };
 
     fetchFavourites();
   }, [currentUser, loading, readDoc]);
 
-  const value = { favourites, loadingNews,setFavourites };
+  const value = { favourites, loadingNews,setFavourites ,error};
   return (
     <FavouriteContext.Provider value={value}>
       {props.children}

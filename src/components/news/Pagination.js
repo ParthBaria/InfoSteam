@@ -1,5 +1,5 @@
 import React from 'react'
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import "./Pagination.css"
 import { useParams } from 'react-router';
 function Pagination(props) {
@@ -14,9 +14,9 @@ function Pagination(props) {
     };
     return (
         <div className="pagination">
-            {page > 1 && <a onClick={() => { handleReplace(page - 1) }} name={`prev`} className="prev">« Previous</a>}
-            <a onClick={handleReplace} name={`on`}>{props.page}</a>
-            {page <= total_page && <a onClick={() => { handleReplace(page + 1) }} name={`next`} className="next">Next »</a>}
+            {page > 1 && <Link onClick={() => { handleReplace(page - 1) }} name={`prev`} className="prev">« Previous</Link>}
+            <Link onClick={handleReplace} name={`on`}>{props.page}</Link>
+            {page <= total_page && <Link onClick={() => { handleReplace(page + 1) }} name={`next`} className="next">Next »</Link>}
         </div>
 
     )
