@@ -25,16 +25,6 @@
     overflow: hidden;
 }
 
-.card_image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-}
-
-.card_img_container:hover .card_image {
-    transform: scale(1.05);
-}
 
 .card_title_contianer {
     padding: 20px;
@@ -51,17 +41,26 @@
     margin: 0 0 10px;
 }
 
-.card_desc {
+.card_desc {    
+    overflow: scroll;
+    scrollbar-color: transparent;
+    max-height:150px;
     font-size: 1rem;
     color: #555;
     margin: 0;
     line-height: 1.5;
+    margin-bottom: 30px;
 }
 
 .footer_container {
     padding: 16px 20px;
     border-top: 1px solid #eee;
     background-color: #f9f9f9;
+    position: absolute;
+  bottom: 10px;
+  width: 100%;
+  padding: 10px 41px;
+  margin: 10px 10px;
 }
 
 .author_container {

@@ -7,67 +7,66 @@ import {
   getDocs,
   query,
   where,
-  deleteDoc,
+  deleteDoc as deleteFirestoreDoc,
 } from "firebase/firestore";
 import app from "../lib/firebase.config";
+import { toast } from "react-toastify";
 
 const db = getFirestore(app);
 
 const firestore = {
+  // 🧩 Read documents matching an email
+  async readDoc(email) {
+    try {
+      const ref = collection(db, "userNews");
+      const q = query(ref, where("email", "==", email));
+      const snapShots = await getDocs(q);
 
-  readDoc: (...args) => {
-    const[inputs]=args;
-    let docs = [];
-    const ref = collection(db, "userNews");
-    const q=query(ref,where("email","==",inputs));
-    return new Promise(async (resolve,reject) => {
-      try {
-        const snapShots = await getDocs(q);
-        
-        snapShots.forEach((doc) => {
-          const id=doc.id;
-          const d = { ...doc.data(),id};
-          docs.push(d);
-        });
+      const docs = snapShots.docs.map((d) => ({
+        id: d.id,
+        ...d.data(),
+      }));
 
-       resolve( docs);
-      } catch (error) {
-        reject(error);
-      }
-    });
-  },
-  writeDoc: (...args) => {
-    const [inputs] = args;
-
-    return new Promise(async (resolve, reject) => {
-      const randomIndex = Math.floor(Math.random() * 10000000);
-
-      try {
-        const docRef = doc(db, "userNews", `${randomIndex}`);
-        await setDoc(docRef, { ...inputs, createdAt: serverTimestamp() });
-
-        resolve("Document written successfully");
-      } catch (error) {
-        reject(error);
-      }
-    });
-  },
-  
-  deleteDoc: (...args) => {
-    const [inputs] = args;
-
-    return new Promise(async (resolve, reject) => {
-      try {
-        const docRef = doc(db, "userNews", `${inputs}`);
-        await deleteDoc(docRef);
-
-        resolve("Document deleted successfully");
-      } catch (error) {
-        reject(error);
-      }
-    });
+      toast.success("Documents fetched successfully ✅");
+      return docs;
+    } catch (error) {
+      console.error("Error reading documents:", error);
+      toast.error("Failed to fetch documents ❌");
+      throw error;
+    }
   },
 
+  // 🧩 Write a new document
+  async writeDoc(data) {
+    try {
+      const randomId = Math.floor(Math.random() * 1e7).toString();
+      const docRef = doc(db, "userNews", randomId);
+
+      await setDoc(docRef, { ...data, createdAt: serverTimestamp() });
+
+      toast.success("Document added successfully ✅");
+      return "Document written successfully";
+    } catch (error) {
+      console.error("Error writing document:", error);
+      toast.error("Failed to add document ❌");
+      throw error;
+    }
+  },
+
+  // 🧩 Delete a document by ID
+  async deleteDoc(id) {
+    try {
+      const docRef = doc(db, "userNews", id);
+      await deleteFirestoreDoc(docRef);
+
+      toast.success("Document deleted successfully 🗑️");
+      return "Document deleted successfully";
+    } catch (error) {
+      console.error("Error deleting document:", error);
+      toast.error("Failed to delete document ❌");
+      throw error;
+    }
+  },
 };
 
 export default firestore;

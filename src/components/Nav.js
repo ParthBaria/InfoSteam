@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Search from "./Search";
 import "./Nav.css";
-import { useLocation, useNavigate } from "react-router";
+import {  useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "./context/AuthContext";
 import { useSearch } from "./context/SearchContext";
@@ -9,10 +9,8 @@ import { useSearch } from "./context/SearchContext";
 function Nav(props) {
   const { currentUser, logout } = useAuthContext();
   const nav=useNavigate();
-  const location = useLocation();
   const { setQuery } = useSearch();
   const [active, setActive] = useState(false);
-  const chk = /^\/page\/\d+$/.test(location.pathname);
 
   const firstChar = currentUser?.email?.charAt(0).toUpperCase() || "";
 
@@ -38,7 +36,7 @@ function Nav(props) {
           <span className="logo_hid">tream</span>
         </div>
 
-        {chk && <Search onChange={handleSearch} />}
+        { <Search onChange={handleSearch} />}
 
         <div className="auth_container">
           {currentUser ? (

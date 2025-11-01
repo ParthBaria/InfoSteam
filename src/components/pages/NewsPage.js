@@ -9,60 +9,85 @@ import ErrorModal from "../UI/ErrorModal";
 import LoadingIndicator from "../UI/LoadingIndicator";
 import { useSearch } from "../context/SearchContext";
 import { toast } from "react-toastify";
-function NewsPage(props) {
-  const [news, setNews] = useState({});
-  const { data, sendRequest, error, isLoading } = useHttp();
+import { useParams, useNavigate } from "react-router-dom";
+
+function NewsPage() {
+  const [news, setNews] = useState({ articles: [], totalPages: 1 });
+  const [category, setCategory] = useState("");
+  const { data, sendRequest, error, isLoading, clearError } = useHttp();
   const { query } = useSearch();
+  const { pn } = useParams();
+const nav=useNavigate();
+  const pageNumber = !isNaN(Number(pn)) && Number(pn) > 0 ? Number(pn) : 1;
 
-  useEffect(() => {
-    const fetch = async () => {
-      try {
-        await sendRequest(
-          `https://gnews.io/api/v4/top-headlines?category=general&apikey=${process.env.REACT_APP_NEWS_API_KEY}`
-        );
-        
-      } catch (error) {
-        toast.error("fetching went wrong!!");
-      }
-    };
-    fetch();
-  }, [sendRequest]);
-  useEffect(() => {
-    setNews(data);
-  }, [data]);
+  // ✅ Build backend URL dynamically based on filters
+  const buildUrl = () => {
+    const params = new URLSearchParams();
+    params.append("page", pageNumber);
+    params.append("limit", 12);
 
-  const clickOption = async (catag) => {
-    try {
-      await sendRequest(
-        `https://gnews.io/api/v4/top-headlines?category=${catag}&apikey=${process.env.REACT_APP_NEWS_API_KEY}`
-      );
-    } catch (error) {
-      toast.error("fetching went wrong!!");
+    if (query) {
+      params.append("q", query);
+      return `https://info-server.vercel.app/api/news/search?${params.toString()}`;
+    } else {
+      if (category) params.append("category", category);
+      return `https://info-server.vercel.app/api/news/top-headlines?${params.toString()}`;
     }
   };
 
+  // ✅ Fetch news whenever page, query, or category changes
   useEffect(() => {
-    try {
-      if (!query) return;
-    fetch(
-      `https://gnews.io/api/v4/search?q=${query}&apikey=${process.env.REACT_APP_NEWS_API_KEY}`
-    )
-      .then((res) => res.json())
-      .then((data) => setNews(data.articles));
-    } catch (error) {
-      toast.error("fetching went wrong!!");
+    const fetchNews = async () => {
+      try {
+        const url = buildUrl();
+        await sendRequest(url);
+      } catch (error) {
+        toast.error("Fetching went wrong!");
+      }
+    };
+    fetchNews();
+  }, [sendRequest, pageNumber, category, query]);
+
+  // ✅ Update news when data changes
+  useEffect(() => {
+    if (data && (data.articles || []).length > 0) {
+      setNews({
+        articles: data.articles,
+        totalPages: data.totalPages || 1,
+      });
+    } else {
+      setNews({ articles: [], totalPages: 1 });
     }
-    
-  }, [query]);
+  }, [data]);
+
+  // ✅ Handle dropdown category change
+  const clickOption = (cat) => {
+    setCategory(cat);
+  };
 
   return (
     <>
-      {error && <ErrorModal msg={error} />}
+      {error && (
+        <ErrorModal
+          msg={error}
+          onClose={() => {
+            clearError();
+            nav("/top")
+          }}
+        />
+      )}
       <Nav />
       <Description />
       <Dropdown onOption={clickOption} />
       {isLoading && <LoadingIndicator />}
-      {!isLoading  && <News news={news} />}
+
+      {!isLoading && (
+        <News
+          news={news.articles}
+          totalPages={news.totalPages}
+          currentPage={pageNumber}
+        />
+      )}
       <Footer />
     </>
   );

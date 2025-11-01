@@ -11,10 +11,11 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Navigate to="/page/1" />} />
+        <Route exact path="/" element={<Navigate to="/top" replace />} />
+        <Route path="/top" element={<NewsPage />}  />
         <Route path="/page/:pn" element={<NewsPage />} />
-        <Route path="favorites/:pn" element={<Favorites />} />
-        <Route path="about" element={<About />} />
+        <Route path="/favorites/:pn" element={<Favorites />} />
+        <Route path="/about" element={<About />} />
         <Route path="login" element={<Authenticate />} />
         <Route path="register" element={<Register />} />
         <Route path="*" element={<p> 404 not found error</p>} />

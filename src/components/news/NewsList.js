@@ -57,7 +57,7 @@ function NewsList(props) {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        key={news.id}
+        key={news.url}
         className="card_container"
       >
         {currentUser && (
@@ -76,7 +76,7 @@ function NewsList(props) {
           rel="noopener noreferrer"
           className="card_img_container"
         >
-          <img src={news.image} className="card_image" alt="not Available" onError={(e)=>{e.target.onerror=null; e.target.src=FallbackImg;}} />
+          <img src={news.urlToImage} className="card_image" alt="not Available" onError={(e)=>{e.target.onerror=null; e.target.src=FallbackImg;}} />
         </a>
  
         <div className="card_title_contianer">
